@@ -1,0 +1,14 @@
+openapi: '3.0.2'
+info:
+  title: Bells and Whistles Shop API
+  version: '1.0'
+servers:
+  - url: https://2o4c9nhcai.execute-api.us-west-1.amazonaws.com/dev/
+paths:
+  /products:
+    get:
+      tags:
+        - "Products"
+      responses:
+        '200':
+          description: OK

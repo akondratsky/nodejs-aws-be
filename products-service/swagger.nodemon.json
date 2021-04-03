@@ -1,0 +1,4 @@
+{
+  "watch": ["swagger.yaml"],
+  "exec": "ts-node swagger.ts"
+}
