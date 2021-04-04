@@ -4,6 +4,34 @@ info:
   version: '1.0'
 servers:
   - url: https://2o4c9nhcai.execute-api.us-west-1.amazonaws.com/dev/
+components:
+  schemas:
+    UUID:
+      type: string
+      pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$
+    ProductList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Product"
+    Product:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        title:
+          description: Name of product
+          type: string
+        count:
+          type: integer
+          minimum: 0
+        description:
+          type: string
+        price:
+          type: number
+          minimum: 0
+        thumbnail:
+          description: URL to picture
+          type: string
 paths:
   /products:
     get:
@@ -12,3 +40,35 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ProductList'
+  /products/{productId}:
+    get:
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            default: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: No product with such ID
+          content:
+            'application/json':
+              example: Product with ID 7567ec4b-b10c-48c5-9345-fc73c48a80ab does not exist
+        '400':
+          description: Incorrect product ID
+          content:
+            'application/json':
+              example: Event object failed validation
