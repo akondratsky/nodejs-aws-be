@@ -1,5 +1,7 @@
+import { JSONSchema7 } from 'json-schema';
+
 export default {
-  type: "object",
+  type: 'object',
   required: ['pathParameters'],
   properties: {
     pathParameters: {
@@ -13,4 +15,4 @@ export default {
       }
     }
   }
-} as const;
+} as JSONSchema7;
