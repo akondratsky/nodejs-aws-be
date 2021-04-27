@@ -67,7 +67,8 @@
     "moduleNameMapper": {
       "^@functions/(.*)$": "<rootDir>/src/functions/$1",
       "^@libs/(.*)$": "<rootDir>/src/libs/$1",
-      "^@services/(.*)$": "<rootDir>/src/services/$1"
+      "^@services/(.*)$": "<rootDir>/src/services/$1",
+      "^@entities/(.*)$": "<rootDir>/src/entities/$1"
     }
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",

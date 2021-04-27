@@ -7,15 +7,14 @@ import httpError from 'http-errors';
 import { logger } from "@services/logger";
 
 export const middyfy = (handler, inputSchema?) => {
-  const middyfied = middy(handler);
-  
+  const middyfied = middy(handler)
+    .use(middyJsonBodyParser())
+    .use(httpErrorHandler())
+    .use(cors());
+
   if (inputSchema) {
     middyfied.use(validator({ inputSchema }));
   }
-
-  middyfied.use(middyJsonBodyParser())
-    .use(httpErrorHandler())
-    .use(cors());
   
   return middyfied;
 };
