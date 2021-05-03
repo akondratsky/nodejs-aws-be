@@ -36,16 +36,36 @@ export const importFileParser  = async (event: S3CreateEvent) => {
                 }
             }))
             .on('data', (product) => {
-                // validate(product);
                 logger.debug('importing product', { product });
             })
-            .on('end', () => {
-                logger.debug('Parsing successfully completed');
+            .on('end', async () => {
+                logger.debug('Parsing successfully completed, copying file');
+
+                const destinationKey = object.key.replace(/^uploaded/, 'parsed');
+
+                logger.debug(`Copy from ${object.key} to ${destinationKey}`);
+
+                await s3.copyObject({
+                    Bucket: IMPORT_FILE_BUCKET,
+                    Key: destinationKey,
+                    CopySource: `${IMPORT_FILE_BUCKET}/${object.key}`
+                }).promise();
+
+                logger.debug('File copied, deleting source from "uploaded/" folder');
+
+                await s3.deleteObject({
+                    Bucket: IMPORT_FILE_BUCKET,
+                    Key: object.key
+                }).promise();
+        
+                logger.debug('File deleted');
             })
             .on('error', (error) => {
                 logger.error(error);
             });
     });
 };
+
+
 
 export const main = middyfy(importFileParser);

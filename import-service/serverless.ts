@@ -34,9 +34,10 @@ const serverlessConfiguration: AWS = {
     },
     iamRoleStatements: [{
       Effect: 'Allow',
-      Action: 'S3:PutObject',
+      Action: 's3:*',
       Resource: [
-        'arn:aws:s3:::bwn-csv-files2/*'
+        'arn:aws:s3:::bwn-csv-files2/*',
+        'arn:aws:s3:::bwn-csv-files2'
       ]
     }],
     environment: {
