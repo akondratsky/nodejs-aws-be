@@ -1,0 +1,79 @@
+{
+  "name": "products-service",
+  "version": "1.0.0",
+  "description": "Serverless aws-nodejs-typescript template",
+  "main": "serverless.ts",
+  "scripts": {
+    "deploy": "cross-env ENV_DEBUG=true sls deploy --stage=dev",
+    "deploy:prod": "cross-env ENV_DEBUG=false sls deploy --stage=prod",
+    "local": "cross-env ENV_DEBUG=true sls offline",
+    "test": "jest",
+    "swagger": "nodemon --config swagger.nodemon.json"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "dependencies": {
+    "@middy/core": "1.5.2",
+    "@middy/http-cors": "2.0.0",
+    "@middy/http-error-handler": "1.5.2",
+    "@middy/http-json-body-parser": "1.5.2",
+    "@middy/validator": "1.5.2",
+    "aws-sdk": "2.895.0",
+    "csv-parser": "3.0.0",
+    "http-errors": "1.8.0",
+    "pg": "8.6.0",
+    "source-map-support": "0.5.19",
+    "winston": "3.3.3"
+  },
+  "devDependencies": {
+    "@serverless/event-mocks": "1.1.1",
+    "@serverless/typescript": "2.23.0",
+    "@types/aws-lambda": "8.10.71",
+    "@types/http-errors": "1.8.0",
+    "@types/jest": "26.0.22",
+    "@types/json-schema": "^7.0.7",
+    "@types/mocha": "8.2.2",
+    "@types/node": "14.14.25",
+    "@types/pg": "7.14.11",
+    "aws-sdk-mock": "5.1.0",
+    "cross-env": "7.0.3",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "jest": "26.6.3",
+    "json-schema-to-ts": "1.5.0",
+    "nodemon": "2.0.7",
+    "serverless": "2.23.0",
+    "serverless-offline": "6.9.0",
+    "serverless-webpack": "5.3.5",
+    "swagger-ui-express": "4.1.6",
+    "ts-jest": "26.5.4",
+    "ts-loader": "8.0.15",
+    "ts-node": "9.1.1",
+    "tsconfig-paths": "3.9.0",
+    "tsconfig-paths-webpack-plugin": "3.3.0",
+    "typescript": "4.1.3",
+    "webpack": "5.20.2",
+    "webpack-node-externals": "2.5.2",
+    "yaml": "1.10.2"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "^@functions/(.*)$": "<rootDir>/src/functions/$1",
+      "^@libs/(.*)$": "<rootDir>/src/libs/$1",
+      "^@services/(.*)$": "<rootDir>/src/services/$1",
+      "^@entities/(.*)$": "<rootDir>/src/entities/$1"
+    }
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
+}
