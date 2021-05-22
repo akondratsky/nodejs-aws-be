@@ -33,23 +33,36 @@ const serverlessConfiguration: AWS = {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
-    iamRoleStatements: [{
-      Effect: 'Allow',
-      Action: 's3:*',
-      Resource: [
-        'arn:aws:s3:::bwn-csv-files2/*',
-        'arn:aws:s3:::bwn-csv-files2'
-      ]
-    }, {
-      Effect: 'Allow',
-      Action: 'sqs:*',
-      Resource: [{
-        'Fn::GetAtt': ['CatalogItemsQueue', 'Arn']
-      }]
-    }],
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 's3:*',
+        Resource: [
+          'arn:aws:s3:::bwn-csv-files2/*',
+          'arn:aws:s3:::bwn-csv-files2'
+        ],
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [{
+          'Fn::GetAtt': ['CatalogItemsQueue', 'Arn']
+        }],
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: [{
+          Ref: 'CatalogItemsTopic'
+        }]
+      }
+    ],
     environment: {
       SQS_URL: {
         Ref: 'CatalogItemsQueue'
+      },
+      CATALOG_ITEM_TOPIC_ARN: {
+        Ref: 'CatalogItemsTopic'
       },
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       ENV_DEBUG: process.env.ENV_DEBUG || 'false',  // I got strange issue: ${opts:} didn't work here!
@@ -68,13 +81,24 @@ const serverlessConfiguration: AWS = {
         Properties: {
           QueueName: 'catalogItemsQueue'
         }
-      }
+      },
+      CatalogItemsTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'catalogItemsTopic',
+        },
+      },
+      CatalogItemsSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'aleksandr_kondratskii@epam.com',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'CatalogItemsTopic'
+          }
+        }
+      },
     }
-    /*
-      Create a SQS queue, called catalogItemsQueue, in the resources section in serverless.yml file. Configure the SQS to trigger lambda catalogBatchProcess with 5 messages at once via batchSize property. The lambda function should iterate over all SQS messages and create corresponding products in the products table.
-
-      Update the importFileParser lambda function (TASK 5) to send each CSV record into SQS.
-    */
   },
   functions: {
     importProductsFile,
