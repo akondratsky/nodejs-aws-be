@@ -76,6 +76,18 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
+      GatewayResponseDefault4XX: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'"
+          },
+          ResponseType: 'DEFAULT_4XX',
+          StatusCode: '401',
+          RestApiId: '4zbmym8vyc',
+        }
+      },
       CatalogItemsQueue: {
         Type: 'AWS::SQS::Queue',
         Properties: {
