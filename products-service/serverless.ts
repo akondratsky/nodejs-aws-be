@@ -44,6 +44,22 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
+  resources: {
+    Resources: {
+      GatewayResponseDefault4XX: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'"
+          },
+          ResponseType: 'DEFAULT_4XX',
+          StatusCode: '401',
+          RestApiId: '3r9wrj0gbk',
+        }
+      },
+    }
+  },
   functions: {
     getProductById,
     getProductsList,
