@@ -7,7 +7,15 @@ export const getProductsList = {
       http: {
         method: 'get',
         path: 'products',
-        cors: true
+        cors: true,
+        authorizer: {
+          type: 'request',
+          resultTtlInSeconds: 0,
+          identitySource: 'method.request.header.Authorization',
+          managedExternally: false,
+          arn: 'arn:aws:cognito-idp:us-east-1:445393499671:userpool/us-east-1_ySYZH3V0R',
+          name: 'cognitoCustomAuthorizer',
+        }
       }
     }
   ]

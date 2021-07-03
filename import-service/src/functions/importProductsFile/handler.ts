@@ -6,23 +6,27 @@ import AWS from 'aws-sdk';
 
 import { logger } from '@services/logger';
 
-export const importProductsFile: ValidatedEventAPIGatewayProxyEvent<never> = async ({ queryStringParameters: { name } }) => {
-    logger.debug(`Get upload URL for file requested: "${name}"`);
+export const importProductsFile: ValidatedEventAPIGatewayProxyEvent<never> = async (event) => {
+  logger.debug(`importProductsFile got event: ${JSON.stringify(event)}`);
 
-    const s3 = new AWS.S3({
-        region: 'us-east-1',
-        signatureVersion: 'v4'
-    });
+  const { queryStringParameters: { name } } = event;
 
-    const url = await trySafe(() => s3.getSignedUrlPromise('putObject', {
-        Bucket: 'bwn-csv-files2',
-        Key: `uploaded/${name}`,
-        Expires: 60,
-    }));
+  logger.debug(`Get upload URL for file requested: "${name}"`);
 
-    logger.debug(`Got URL for file upload: ${JSON.stringify(url)}`);
+  const s3 = new AWS.S3({
+    region: 'us-east-1',
+    signatureVersion: 'v4'
+  });
 
-    return formatJSONResponse(url);
+  const url = await trySafe(() => s3.getSignedUrlPromise('putObject', {
+    Bucket: 'bwn-csv-files2',
+    Key: `uploaded/${name}`,
+    Expires: 60,
+  }));
+
+  logger.debug(`Got URL for file upload: ${JSON.stringify(url)}`);
+
+  return formatJSONResponse(url);
 }
 
 export const main = middyfy(importProductsFile, schema);
